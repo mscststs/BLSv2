@@ -1,0 +1,46 @@
+/**
+* Theme Definition
+*/
+
+@bgColor: #1e1e1e;
+@textColor: #4fb8fe;
+// 覆盖默认样式
+
+*{
+  user-select: none;
+}
+
+
+button,a{
+  display:inline-block;
+  border:none;
+  border-width:0px;
+  border-style: none;
+  background-color:transparent;
+  outline:none;
+  cursor:pointer;
+}
+
+// 定义一些基础 UI 类
+
+.flex{
+  display:flex;
+}
+.flex-row{
+  display:flex;
+  flex-direction: row;
+}
+.flex-column{
+  display:flex;
+  flex-direction: column;
+}
+.flex-none{
+  flex:none;
+}
+.flex-auto{
+  flex:auto;
+}
+.flex-center{
+  align-items: center;
+  justify-content: center;
+}
