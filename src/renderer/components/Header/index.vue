@@ -14,9 +14,9 @@
 
 <script>
 import {ipcRenderer, shell} from 'electron'
+import packageOptions from '@/../../package.json'
 
 import HeaderButton from './HeaderButton'
-import packageOptions from '@/../../package.json'
 
 export default {
   name: 'barheader',

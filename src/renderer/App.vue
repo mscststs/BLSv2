@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <Header></Header>
-    <div class="content flex-auto">
-      
+    <div class="content flex-auto flex">
+      <TabView></TabView>
       <!-- 全局弹框 -->
       <Dialog></Dialog>
     </div>
@@ -11,12 +11,14 @@
 
 <script>
 import Header from './components/Header/'
-import Dialog from './components/dialog/'
+import Dialog from './components/Dialog/'
+import TabView from './components/TabView'
 export default {
   name: 'blsv2',
   components: {
     Header,
-    Dialog
+    Dialog,
+    TabView
   }
 }
 </script>

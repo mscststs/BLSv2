@@ -29,8 +29,11 @@ function createWindow () {
     backgroundColor: '#1e1e1e',
     width: 1200,
     minWidth: 850, // 最小窗口宽度
-    minHeight: 400, // 最小窗口高度
-    fullscreenable: false // 禁止最大化
+    minHeight: 600, // 最小窗口高度
+    fullscreenable: false, // 禁止最大化
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
 
   ipcMain.on('window', (ctx, command) => {
