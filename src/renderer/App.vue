@@ -1,15 +1,22 @@
 <template>
   <div id="app">
     <Header></Header>
+    <div class="content flex-auto">
+      
+      <!-- 全局弹框 -->
+      <Dialog></Dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import Header from './components/Header/index.vue'
+import Header from './components/Header/'
+import Dialog from './components/dialog/'
 export default {
   name: 'blsv2',
   components: {
-    Header
+    Header,
+    Dialog
   }
 }
 </script>

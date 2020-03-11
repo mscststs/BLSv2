@@ -30,9 +30,13 @@ export default {
     /**
        * 关闭窗口
        */
-    close () {
-      // TODO : 添加关闭前确认
-      ipcRenderer.send('window', 'close')
+    async close () {
+      try {
+        await this.confirm('程序将完全退出')
+        ipcRenderer.send('window', 'close')
+      } catch (e) {
+
+      }
     }
   }
 }
