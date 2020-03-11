@@ -1,5 +1,6 @@
 <template>
-  <button class="headerBtn flex flex-center" :class="stateClass" @click.prevent.stop="clickBtn">
+  <button class="headerBtn flex flex-center" :class="stateClass" @click.prevent.stop="clickBtn"
+  :title="tooltip">
     <ficon :icon="icon"></ficon>
   </button>
 </template>
@@ -10,7 +11,8 @@ export default {
   name: 'HeaderButton',
   props: [
     'icon',
-    'type'
+    'type',
+    'tooltip'
   ],
   computed: {
     stateClass () {
@@ -32,11 +34,12 @@ export default {
 <style lang="less">
   .headerBtn{
     height:100%;
-    padding:0 25px;
+    padding:0 20px;
     color:#fefcfc;
     font-size: 16px;
     transition:background-color 0.25s;
     -webkit-app-region: no-drag;
+    min-width: 60px;
     &:hover{
       &.danger{
         background-color:#d71526;
