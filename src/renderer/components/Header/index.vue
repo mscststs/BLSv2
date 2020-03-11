@@ -5,8 +5,8 @@
       <span class="version">( v {{packageOptions.version}} )</span>
     </div>
     <div class="flex-auto"></div>
-    <header-button icon="code-branch" @click="showAbout" tooltip="前往仓库"></header-button>
-    <header-button icon="terminal" @click="openDevTool" tooltip="开发者工具"></header-button>
+    <header-button icon="code-branch" @click="showAbout" tooltip="Git仓库"></header-button>
+    <header-button icon="wrench" @click="openDevTool" tooltip="开发者工具"></header-button>
     <header-button icon="minus" @click="minimize" tooltip="最小化"></header-button>
     <header-button icon="times" type="danger" @click="close" tooltip="关闭"></header-button>
   </div>
