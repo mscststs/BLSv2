@@ -5,6 +5,7 @@
       <template v-for="(tab,index) of tabs">
         <div class="tabItem flex-center" :class="{active:index === activeId}" :key="tab.tabName"
         @click="setActive(index)">
+          <ficon :icon="tab.icon" fixed-width style="margin:0 5px;"></ficon>
           {{tab.tabName}}
         </div>
       </template>
@@ -12,7 +13,9 @@
     <!-- 右侧 tab 内容 -->
     <div class="tabContent flex-column flex-auto scroll-y">
       <template v-for="(tab,index) of tabs">
-        <component :is="tab.component" :key="tab.tabName" v-show="index === activeId"></component>
+        <keep-alive :key="tab.tabName" >
+          <component :is="tab.component" v-if="index === activeId"></component>
+        </keep-alive>
       </template>
     </div>
   </div>
@@ -48,9 +51,11 @@ export default {
       color:#ccc;
       font-size:15px;
       letter-spacing: 1px;
+      padding-right: 10px;
+      box-sizing: border-box;
       &.active{
         color:#fff;
-        background-color:#37373d;
+        background-color:#094771;
       }
     }
   }

@@ -62,7 +62,8 @@
     "request-promise-native": "^1.0.8",
     "tough-cookie": "^3.0.1",
     "vue": "^2.5.16",
-    "vue-electron": "^1.0.6"
+    "vue-electron": "^1.0.6",
+    "ws": "^4.1.0"
   },
   "devDependencies": {
     "ajv": "^6.5.0",
