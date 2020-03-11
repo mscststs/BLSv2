@@ -34,11 +34,30 @@
     <div class="flowPanel flex-column">
       <!-- 控制条 -->
       <div class="control flex-row flex-none">
-
+        <!-- 录制 -->
+        <template>
+          <button class="btn-icon red" v-if="recordOptions.record" @click="stopRecord" title="关闭数据分析器">
+            <ficon icon="circle"></ficon>
+          </button>
+          <button class="btn-icon" v-else @click="startRecord" title="打开数据分析器">
+            <ficon icon="stop"></ficon>
+          </button>
+        </template>
+        <!-- 清空 -->
+        <button class="btn-icon" @click="clearRecords" title="清空">
+          <ficon icon="times"></ficon>
+        </button>
+        <div class="hline"></div>
+        <ButtonSelector v-model="recordOptions.filterdArea" :options="areaOption"></ButtonSelector>
+        <div class="hline"></div>
       </div>
       <!-- 数据区 -->
-      <div class="flowDataContent flex-auto flex-column">
-        
+      <div class="flowDataContent scroll-y flex-auto flex-column">
+        <!-- <template v-for="(item,index) of recordOptions.records">
+          <div class="recordItem flex-none" :key="index">
+            {{item}}
+          </div>
+        </template> -->
       </div>
     </div>
   </div>
@@ -47,6 +66,7 @@
 <script>
 
 import DanmakuService from '@/utils/danmaku'
+import ButtonSelector from '@/views/ButtonSelector'
 export default {
   name: 'Danmaku',
   data () {
@@ -82,7 +102,26 @@ export default {
           type: 6,
           dm: null
         }
-      ]
+      ],
+      recordOptions: {
+        record: false,
+        records: [],
+        filterdArea: ['娱乐']
+      }
+    }
+  },
+  components: {
+    ButtonSelector
+  },
+  computed: {
+    areaOption () {
+      return this.square.map(item => {
+        let {name} = item
+        return {
+          label: name,
+          value: name
+        }
+      })
     }
   },
   mounted () {
@@ -90,8 +129,29 @@ export default {
       s.dm = new DanmakuService(s.type, s.name)
       s.dm.connect()
     })
+    this.$eve.on('dm', this.handleDmRecords)
+  },
+  beforeDestroy () {
+    this.$eve.off('dm', this.handleDmRecords)
   },
   methods: {
+    // 弹幕数据处理函数
+    handleDmRecords (record) {
+      if (this.recordOptions.record) {
+        console.log(record)
+        this.recordOptions.records.push(record)
+      }
+    },
+    stopRecord () {
+      this.recordOptions.record = false
+    },
+    startRecord () {
+      this.recordOptions.record = true
+      this.recordOptions.records = []
+    },
+    clearRecords () {
+      this.recordOptions.records = []
+    }
   }
 }
 </script>
@@ -118,9 +178,38 @@ export default {
         line-height: 20px;
         height:20px;
         &:hover{
-          background-color:#424242;
+          background-color:#303030;
           color:#fff;
         }
+      }
+    }
+    .flowPanel{
+      .control{
+        min-height:20px;
+        height:20px;
+        line-height:20px;
+        font-size:12px;
+        .btn-icon{
+          height:20px;
+          width:20px;
+          display:flex;
+          justify-content: center;
+          align-items: center;
+          color:#999;
+          margin:0 2px;
+          &.red{
+            color:#d04c39;
+            &:hover{
+              color:#f48771
+            }
+          }
+          &:hover{
+            color:#ccc;
+          }
+        }
+      }
+      .flowDataContent{
+        width:100%;
       }
     }
   }
