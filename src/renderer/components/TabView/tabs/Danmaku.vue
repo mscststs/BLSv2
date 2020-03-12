@@ -55,6 +55,7 @@
         <span class="info">
           {{filtedRecord.length}} / {{recordOptions.records.length}}
         </span>
+        <span class="info" style="margin:0 10px;" v-if="recordOptions.records.length > 5000">（数据过多，可能导致卡顿）</span>
       </div>
       <div class="vline"></div>
       <!-- 数据区 -->
