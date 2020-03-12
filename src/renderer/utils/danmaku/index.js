@@ -69,6 +69,10 @@ class dm {
         this.pkgCount++
         eve.emit('dm', {
           roomid: this.roomid,
+          type: this.type,
+          name: this.name,
+          time: new Date().valueOf(),
+          key: this.roomid + '_' + this.pkgCount,
           data
         })
         // console.log(data);

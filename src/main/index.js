@@ -28,8 +28,8 @@ function createWindow () {
     frame: false,
     backgroundColor: '#1e1e1e',
     width: 1200,
-    minWidth: 850, // 最小窗口宽度
-    minHeight: 600, // 最小窗口高度
+    minWidth: 1200, // 最小窗口宽度
+    minHeight: 800, // 最小窗口高度
     fullscreenable: false, // 禁止最大化
     webPreferences: {
       nodeIntegration: true

@@ -9,6 +9,7 @@
 *{
   user-select: none;
   cursor:default;
+  &::-webkit-scrollbar { width: 0 !important }
 }
 
 
@@ -67,12 +68,12 @@ table{
 .vline{
   margin: 20px 0;
   height:1px;
-  width:100%;
+  flex:none;
   background-color:#666;
 }
 .hline{
   margin: 0 10px;
-  height:100%;
   width:1px;
+  flex:none;
   background-color:#666;
 }
