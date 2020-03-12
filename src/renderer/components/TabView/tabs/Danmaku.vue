@@ -112,6 +112,7 @@ import DanmakuService from '@/utils/danmaku'
 import ButtonSelector from '@/views/ButtonSelector'
 import VueJsonPretty from 'vue-json-pretty'
 import {clipboard} from 'electron'
+import {cacheAble} from '@/utils/tools'
 
 export default {
   name: 'Danmaku',
@@ -210,11 +211,9 @@ export default {
     filtedRecord () {
       let {records, filterdArea, filterdType} = this.recordOptions
       return records.filter(v => {
-        let areaFlag = ~filterdArea.indexOf(v.type)
+        let type = v.type
         let dmType = v.data.type
-        let [targetType] = filterdType
-        let typeFlag = targetType === '' ? true : targetType === dmType
-        return areaFlag && typeFlag
+        return this.checker({type, dmType}, filterdArea, filterdType)
       })
     }
   },
@@ -224,11 +223,19 @@ export default {
       s.dm.connect()
     })
     this.$eve.on('dm', this.handleDmRecords)
+
+    this.checker = cacheAble(this.checker) // 将校验函数转化为缓存函数，可以极大提升性能
   },
   beforeDestroy () {
     this.$eve.off('dm', this.handleDmRecords)
   },
   methods: {
+    checker ({type, dmType}, filterdArea, filterdType) {
+      let areaFlag = ~filterdArea.indexOf(type)
+      let [targetType] = filterdType
+      let typeFlag = targetType === '' ? true : targetType === dmType
+      return areaFlag && typeFlag
+    },
     // 弹幕数据处理函数
     handleJsonClick (path, value) {
       let text = path.replace(/^root\.?/, '')
