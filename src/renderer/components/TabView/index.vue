@@ -9,6 +9,7 @@
           {{tab.tabName}}
         </div>
       </template>
+      <div class="flex-auto appregion"></div>
     </div>
     <!-- 右侧 tab 内容 -->
     <div class="tabContent flex-column flex-auto scroll-y">
