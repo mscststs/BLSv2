@@ -266,12 +266,7 @@ export default {
         // 清空数据
         this.stopRecord()
         this.clearRecords()
-        // 去重插入
-        let KeyGenMap = {}
-        this.recordOptions.records.forEach(i => {
-          KeyGenMap[i.key] = 1
-        })
-        this.recordOptions.records.push(...data.filter(dmItem => !KeyGenMap[dmItem.key]))
+        this.recordOptions.records = data
       }
     },
     checker ({type, dmType}, filterdArea, filterdType) {
