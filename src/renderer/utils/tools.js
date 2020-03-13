@@ -114,7 +114,6 @@ export async function readJsonFile () {
       properties: ['openFile']
     })
     if (filePath) {
-      console.log(filePath)
       let f = await fs.readJson(filePath)
       eve.emit('toast', '导入成功')
       return f
