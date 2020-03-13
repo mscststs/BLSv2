@@ -108,18 +108,18 @@ export default {
   display:flex;
   width:100%;
   height:100%;
-  background-color:transparent;
+  background-color:rgba(0,0,0,0.3);
   flex-direction: column;
   .dialogContainer{
-    margin:30px auto 0 auto;
+    margin:60px auto 0 auto;
     flex:none;
     align-items: center;
     width:initial;
     height:auto;
     background-color:#252525;
-    box-shadow: 0 0 15px 0 rgba(0,0,0,0.8);
-    padding:10px;
-    color:#eee;
+    box-shadow: 0 0 25px 0 rgba(0,0,0,0.8);
+    padding:20px;
+    color:#ddd;
     border-radius:2px;
     .alert,.confirm{
       width:400px;

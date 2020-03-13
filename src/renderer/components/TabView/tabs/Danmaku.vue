@@ -47,6 +47,19 @@
         <button class="btn-icon" @click="clearRecords" title="清空列表">
           <ficon icon="times"></ficon>
         </button>
+        <!-- 导出数据 -->
+        <button 
+          class="btn-icon" 
+          title="导出数据" 
+          :disabled="recordOptions.records.length === 0"
+          @click="exportToFile"
+        >
+          <ficon icon="upload"></ficon>
+        </button>
+        <!-- 导入数据 -->
+        <button class="btn-icon" title="从文件导入" @click="importFromFile">
+          <ficon icon="download"></ficon>
+        </button>
         <div class="hline"></div>
         <ButtonSelector v-model="recordOptions.filterdArea" :options="areaOption" notEmpty></ButtonSelector>
         <div class="hline"></div>
@@ -65,7 +78,8 @@
           <table class="listData flex-none">
             <thead>
               <td width="60px">分区</td>
-              <td width="120px">房间</td>
+              <td width="90px">房间</td>
+              <td width="100px">时间</td>
               <td>类型</td>
             </thead>
           </table>
@@ -77,8 +91,11 @@
                   <td class="item" width="60px">
                     {{item.name}}
                   </td>
-                  <td class="item" width="120px">
+                  <td class="item" width="90px">
                     {{item.roomid}}
+                  </td>
+                  <td class="item" width="100px">
+                    {{formatTime(new Date(item.time),"HH:mm:ss")}}
                   </td>
                   <td class="item">
                     {{item.data.type}}
@@ -113,7 +130,7 @@ import DanmakuService from '@/utils/danmaku'
 import ButtonSelector from '@/views/ButtonSelector'
 import VueJsonPretty from 'vue-json-pretty'
 import {clipboard} from 'electron'
-import {cacheAble} from '@/utils/tools'
+import {cacheAble, formatTime, writeJsonFile, readJsonFile} from '@/utils/tools'
 
 export default {
   name: 'Danmaku',
@@ -231,6 +248,32 @@ export default {
     this.$eve.off('dm', this.handleDmRecords)
   },
   methods: {
+    formatTime,
+    async exportToFile () {
+      writeJsonFile(this.recordOptions.records)
+    },
+    async importFromFile () {
+      try {
+        if (this.recordOptions.records.length) {
+          await this.confirm('导入数据将清空已有数据')
+        }
+      } catch (e) {
+        return // 拒绝
+      }
+      let data = await readJsonFile()
+      // 简单检查数据格式
+      if (data && Array.isArray(data) && data[0].data && data[0].key) {
+        // 清空数据
+        this.stopRecord()
+        this.clearRecords()
+        // 去重插入
+        let KeyGenMap = {}
+        this.recordOptions.records.forEach(i => {
+          KeyGenMap[i.key] = 1
+        })
+        this.recordOptions.records.push(...data.filter(dmItem => !KeyGenMap[dmItem.key]))
+      }
+    },
     checker ({type, dmType}, filterdArea, filterdType) {
       let areaFlag = ~filterdArea.indexOf(type)
       let [targetType] = filterdType
@@ -254,12 +297,24 @@ export default {
     stopRecord () {
       this.recordOptions.record = false
     },
-    startRecord () {
+    async startRecord () {
+      try {
+        if (this.recordOptions.records.length) {
+          await this.confirm('重新开始录制将清空已有数据')
+        }
+      } catch (e) {
+        return
+        // canceled
+      }
+      this.clearRecords()
       this.recordOptions.record = true
-      this.recordOptions.records = []
     },
     clearRecords () {
       this.recordOptions.records = []
+      this.recordDeatilOption = {
+        key: '',
+        item: null
+      }
     }
   }
 }
@@ -306,6 +361,9 @@ export default {
           align-items: center;
           color:#999;
           margin:0 2px;
+          &:disabled{
+            opacity:0.5;
+          }
           &.red{
             color:#d04c39;
             &:hover{
