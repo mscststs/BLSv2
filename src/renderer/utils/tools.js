@@ -102,7 +102,6 @@ export async function writeJsonFile (obj) {
  */
 export async function readJsonFile () {
   let {dialog} = remote
-  console.log(dialog)
   try {
     let [filePath] = await dialog.showOpenDialog({
       filters: [
