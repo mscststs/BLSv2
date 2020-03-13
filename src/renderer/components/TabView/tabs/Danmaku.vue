@@ -114,7 +114,7 @@
             title="复制"
             @click="copyDetail"
           >
-            <ficon icon="clipboard" fixed-width></ficon>
+            <ficon :icon="recordDeatilOption.copidItem ===recordDeatilOption.item ?'clipboard-check' :'clipboard'" fixed-width></ficon>
           </button>
           <VueJsonPretty 
             v-if="recordDeatilOption.item"
@@ -184,7 +184,8 @@ export default {
       },
       recordDeatilOption: {
         key: '',
-        item: null
+        item: null,
+        copidItem: null
       }
     }
   },
@@ -259,6 +260,7 @@ export default {
     formatTime,
     copyDetail () {
       clipboard.writeText(JSON.stringify(this.recordDeatilOption.item, null, 4))
+      this.recordDeatilOption.copidItem = this.recordDeatilOption.item
     },
     async exportToFile () {
       writeJsonFile(this.recordOptions.records)
@@ -319,7 +321,8 @@ export default {
       this.recordOptions.records = []
       this.recordDeatilOption = {
         key: '',
-        item: null
+        item: null,
+        copidItem: null
       }
     }
   }
