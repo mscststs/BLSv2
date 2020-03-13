@@ -108,6 +108,14 @@
         <!-- 数据解析 -->
         <div class="hline"></div>
         <div class="listDataDetail flex flex-auto scroll-y">
+          <button 
+            class="icon-paste" 
+            v-if="recordDeatilOption.item"
+            title="复制"
+            @click="copyDetail"
+          >
+            <ficon icon="clipboard" fixed-width></ficon>
+          </button>
           <VueJsonPretty 
             v-if="recordDeatilOption.item"
             :data="recordDeatilOption.item" 
@@ -249,6 +257,9 @@ export default {
   },
   methods: {
     formatTime,
+    copyDetail () {
+      clipboard.writeText(JSON.stringify(this.recordDeatilOption.item, null, 4))
+    },
     async exportToFile () {
       writeJsonFile(this.recordOptions.records)
     },
@@ -407,6 +418,7 @@ export default {
           }
         }
         .listDataDetail{
+          position:relative;
           word-break: break-all;
           *{
             user-select: auto;
@@ -418,6 +430,24 @@ export default {
           .emptyBg{
             font-size:60px;
             color:#303030;
+          }
+          .icon-paste{
+            position:absolute;
+            right:10px;
+            top:10px;
+            font-size:14px;
+            padding:5px 3px;
+            border:1px dotted #999;
+            color:#999;
+            cursor:pointer;
+            transition:all 0.25s;
+            &:hover{
+              border:1px solid #ddd;
+              color:#ddd;
+            }
+            *{
+              cursor:pointer;
+            }
           }
         }
       }
