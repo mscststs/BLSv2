@@ -434,6 +434,7 @@ export default {
             color:#303030;
           }
           .icon-paste{
+            z-index:100;
             position:absolute;
             right:10px;
             top:10px;
