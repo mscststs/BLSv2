@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="users flex-column flex-auto">
     Users
   </div>
 </template>
@@ -19,5 +19,7 @@ export default {
 </script>
 
 <style lang="less">
-  
+  .users{
+    padding:10px;
+  }
 </style>

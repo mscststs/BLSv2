@@ -97,7 +97,7 @@ export async function writeJsonFile (obj) {
 }
 
 /**
- * @description 导出 json 文件
+ * @description 导入 json 文件
  * @return {object} obj
  */
 export async function readJsonFile () {
