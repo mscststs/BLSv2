@@ -7,7 +7,7 @@
         <div class="title">{{alertOptions.title}}</div>
         <div class="message">{{alertOptions.message}}</div>
         <div class="buttonGroup flex flex-row-reverse">
-          <div class="button" @click="resolveDialog(alertOptions)">确认</div>
+          <button class="button" @click="resolveDialog(alertOptions)">确认</button>
         </div>
       </div>
 
@@ -16,8 +16,32 @@
         <div class="title">{{confirmOptions.title}}</div>
         <div class="message">{{confirmOptions.message}}</div>
         <div class="buttonGroup flex flex-row-reverse">
-          <div class="button" @click="resolveDialog(confirmOptions)">确认</div>
-          <div class="button" @click="rejectDialog(confirmOptions)">取消</div>
+          <button class="button" @click="resolveDialog(confirmOptions)">确认</button>
+          <button class="button" @click="rejectDialog(confirmOptions)">取消</button>
+        </div>
+      </div>
+
+      <!-- prompt -->
+      <div class="alert flex flex-column" v-if="promptOptions.pr">
+        <div class="title">{{promptOptions.title}}</div>
+        <div class="form flex-column">
+          <template v-for="(label,index) of promptOptions.form" >
+            <div :key="index" class="form-item flex-none flex-row">
+              <div class="label flex-none">
+                {{label}}
+              </div>
+              <input
+                v-focus="index===0"
+                type="text"
+                class="flex-auto form-input"
+                v-model="promptOptions.value[index]"
+              />
+            </div>
+          </template>
+        </div>
+        <div class="buttonGroup flex flex-row-reverse">
+          <button class="button" @click="resolveDialog(promptOptions)">确认</button>
+          <button class="button" @click="rejectDialog(promptOptions)">取消</button>
         </div>
       </div>
 
@@ -54,12 +78,24 @@ export default {
         title: '',
         message: '',
         pr: null
+      },
+      promptOptions: {
+        title: '',
+        form: null,
+        value: null,
+        pr: null
       }
     }
   },
   created () {
     Vue.prototype.alert = this.alert
     Vue.prototype.confirm = this.confirm
+    Vue.prototype.prompt = this.prompt
+  },
+  watch: {
+    'promptOptions.form': function (newVal) {
+      this.promptOptions.value = Object.keys(newVal).map(() => '')
+    }
   },
   methods: {
     showDialog () {
@@ -69,7 +105,7 @@ export default {
     rejectDialog (Options) {
       let {pr} = Options
       Options.pr = null
-      pr && pr.reject && pr.reject()
+      pr && pr.reject && pr.reject(new Error('[confirm/prompt]: 取消'))
       this.isShowDialog = false
     },
     resolveDialog (Options) {
@@ -94,6 +130,16 @@ export default {
       this.confirmOptions = {
         title,
         message,
+        pr
+      }
+      return pr.promise
+    },
+    prompt (title, form = {}) {
+      console.log('[prompt]:', title, form)
+      let pr = this.showDialog()
+      this.promptOptions = {
+        title,
+        form,
         pr
       }
       return pr.promise
@@ -133,6 +179,22 @@ export default {
         margin:10px 0;
         word-break: break-all;
       }
+      .form{
+        padding:10px 0;
+        .form-item{
+          padding: 5px 0;
+          .label{
+            width:100px;
+          }
+          .form-input{
+            background-color:#444;
+            border:none;
+            outline:none;
+            color:#ccc;
+            padding:3px 5px;
+          }
+        }
+      }
     }
     /* buttonGroup 通用样式 */
     .buttonGroup{
@@ -145,6 +207,9 @@ export default {
         padding:0 15px;
         margin:0 10px;
         background-color:#007acc;
+        &:focus{
+          background-color:#1f8ad2;
+        }
         &:hover{
           background-color:#1f8ad2;
         }

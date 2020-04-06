@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
+import * as electron from 'electron'
 import windowCommand from './windowCommand'
 /**
  * Set `__static` path to static files in production
@@ -36,11 +37,11 @@ function createWindow () {
     }
   })
 
-  ipcMain.on('window', (ctx, command) => {
+  ipcMain.on('window', (event, command) => {
     console.log('Window Command: ', command)
     if (windowCommand[command]) {
       // 检查是否有预定义命令函数
-      windowCommand[command](mainWindow)
+      windowCommand[command].bind(electron)(event, mainWindow)
     } else if (mainWindow[command] && typeof mainWindow[command] === 'function') {
       // 检查是否可以直接调用
       mainWindow[command]()

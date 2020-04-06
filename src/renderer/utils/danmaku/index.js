@@ -47,6 +47,13 @@ class dm {
       // 无须打印这么多正常房间消息
     }
   }
+  /**
+   * 强制刷新连接
+   */
+  refresh () {
+    this.disconnect()
+    this.connect()
+  }
   async connect () {
     this.pkgCount = 0
     if (Object.keys(this.dm).length && this.dm._socket) {

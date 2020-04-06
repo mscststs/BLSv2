@@ -1,5 +1,5 @@
 export default {
-  devTool (mainWindow) {
+  devTool (event, mainWindow) {
     mainWindow.webContents.openDevTools({
       mode: 'detach'
     })
