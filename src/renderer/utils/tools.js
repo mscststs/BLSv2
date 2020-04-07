@@ -1,6 +1,7 @@
 import { remote } from 'electron'
 import fs from 'fs-extra'
 import eve from './events'
+import autoSlideScript from './script/autoSlide' // 自动滑动登录
 
 /**
  * @description 将一个函数的参数和结果进行缓存
@@ -136,7 +137,7 @@ export async function userLogin (username = '', password = '') {
     title: 'bilibili 快速登录',
     parent: currentWindow,
     webPreferences: {
-      devTools: false
+      // devTools: false
     },
     darkTheme: true
   })
@@ -157,9 +158,11 @@ export async function userLogin (username = '', password = '') {
         })
       })
       childWebContents.executeJavaScript(`
-        document.querySelector("#login-username").value = "${username}"
-        document.querySelector("#login-passwd").value = "${password}"
+        document.querySelector("#login-username").value = "${username}";
+        document.querySelector("#login-passwd").value = "${password}";
+        ${autoSlideScript}
       `)
+      console.log(autoSlideScript)
       // 等待重定向 -- 可能密码
       let cookies = await new Promise((resolve, reject) => {
         childWebContents.once('will-navigate', (event, url) => {
