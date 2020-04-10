@@ -1,10 +1,9 @@
-/* eslint-disable */
 import Consts from './consts.js'
 import { StringDecoder } from 'string_decoder'
-
-const textDecoder = new StringDecoder('utf8')
+import {unzipSync} from 'zlib'
 
 function decodeBuffer (buff) {
+  const textDecoder = new StringDecoder('utf8')
   let data = {}
   data.packetLen = buff.readInt32BE(Consts.WS_PACKAGE_OFFSET)
   Consts.dataStruct.forEach((struct) => {
@@ -25,7 +24,13 @@ function decodeBuffer (buff) {
         let body = JSON.parse(textDecoder.write(buff.slice(offset + headerLen, offset + packetLen)))
         data.body.push(body)
       } catch (e) {
-        console.log("decode body error:", textDecoder.write(buff.slice(offset + headerLen, offset + packetLen)), data)
+        // B 站添加了代码压缩，必须解压一下
+        try {
+          let unzipedData = unzipSync(buff.slice(offset + headerLen, offset + packetLen))
+          return decodeBuffer(unzipedData)
+        } catch (e) {
+          console.log('decode body error:', textDecoder.write(buff.slice(offset + headerLen, offset + packetLen)), data, e)
+        }
       }
     }
   } else if (data.op && data.op === Consts.WS_OP_HEARTBEAT_REPLY) {
@@ -162,7 +167,7 @@ function decodeData (buff) {
       messages.push(data)
     }
   } catch (e) {
-    console.log("Socket message error", buff, e)
+    console.log('Socket message error', buff, e)
   }
   return messages
 }
